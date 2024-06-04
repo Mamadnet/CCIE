@@ -1,0 +1,40 @@
+
+ISP-1(config-router-af)#neighbor 10
+*May 29 15:30:44.348: BGP: 10.1.1.1 passive open to 10.1.1.2
+*May 29 15:30:44.348: BGP: Fetched peer 10.1.1.1 from tcb
+*May 29 15:30:44.350: BGP: 10.1.1.1 passive went from Idle to Connect
+*May 29 15:30:44.351: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas Setting open delay timer to 60 seconds.
+*May 29 15:30:44.363: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas read request no-op
+*May 29 15:30:44.365: BGP: 10.1.1.1 passive rcv message type 1, length (excl. header) 38
+*May 29 15:30:44.365: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas Receive OPEN
+*May 29 15:30:44.368: BGP: 10.1.1.1 passive rcv OPEN, version 4, holdtime 180 seconds
+*May 29 15:30:44.368: BGP: 10.1.1.1 passive rcv OPEN w/ OPTION parameter len: 28
+*May 29 15:30:44.369: BGP: 10.1.1.1 passive rcvd OPEN w/ optional parameter type 2 (Capability) len 6
+*May 29 15:30:44.369: BGP: 10.1.1.1 passive OPEN has CAPABILITY code: 1, length 4
+*May 29 15:30:44.370: BGP: 10.1.1.1 passive OPEN has MP_EXT CAP for afi/safi: 1/1
+*May 29 15:30:44.370: BGP: 10.1.1.1 passive rcvd OPEN w/ optional parameter type 2 (Capability) len 2
+*May 29 15:30:44.370: BGP: 10.1.1.1 passive OPEN has CAPABILITY code: 128, length 0
+*May 29 15:30:44.371: BGP: 10.1.1.1 passive OPEN has ROUTE-REFRESH capability(old) for all address-families
+*May 29 15:30:44.371: BGP: 10.1.1.1 passive rcvd OPEN w/ optional parameter type 2 (Capability) len 2
+*May 29 15:30:44.371: BGP: 10.1.1.1 passive OPEN has CAPABILITY code: 2, length 0
+*May 29 15:30:44.372: BGP: 10.1.1.1 passive OPEN has ROUTE-REFRESH capability(new) for all address-families
+*May 29 15:30:44.372: BGP: 10.1.1.1 passive rcvd OPEN w/ optional parameter type 2 (Capability) len 2
+*May 29 15:30:44.372: BGP: 10.1.1.1 passive OPEN has CAPABILITY code: 70, length 0
+*May 29 15:30:44.373: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas Enhanced Refresh cap received in open message
+*May 29 15:30:44.373: BGP: 10.1.1.1 passive rcvd OPEN w/ optional parameter type 2 (Capability) len 6
+*May 29 15:30:44.374: BGP: 10.1.1.1 passive OPEN has CAPABILITY code: 65, length 4
+*May 29 15:30:44.374: BGP: 10.1.1.1 passive OPEN has 4-byte ASN CAP for: 100
+*May 29 15:30:44.375: BGP: 10.1.1.1 passive rcvd OPEN w/ remote AS 100, 4-byte remote AS 100
+*May 29 15:30:44.375: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas Adding topology IPv4 Unicast:base
+*May 29 15:30:44.376: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas Send OPEN
+*May 29 15:30:44.377: BGP: ses global 10.1.1.1 (0x10F065C0:0) pas Building Enhanced Refresh capability
+*May 29 15:30:44.378: BGP: 10.1.1.1 passive went from Connect to OpenSent
+*May 29 15:30:44.378: BGP: 10.1.1.1 passive sending OPEN, version 4, my as: 1, holdtime 180 seconds, ID A010302
+*May 29 15:30:44.379: BGP: 10.1.1.1 passive went from OpenSent to OpenConfirm
+*May 29 15:30:44.410: BGP: 10.1.1.1 passive went from OpenConfirm to Established
+*May 29 15:30:44.410: BGP: ses global 10.1.1.1 (0x10F065C0:1) pas Assigned ID
+*May 29 15:30:44.411: BGP: nbr global 10.1.1.1 Stop Active Open timer as all topologies are allocated
+*May 29 15:30:44.414: BGP: ses global 10.1.1.1 (0x10F065C0:1) Up
+*May 29 15:30:44.414: %BGP-5-ADJCHANGE: neighbor 10.1.1.1 Up
+*May 29 15:30:44.419: BGP: ses global 10.1.1.1 (0x10F065C0:1) read request no-op
+*May 29 15:30:48.187: BGP: Sched timer-wheel running slow by 1 ticks.1.1
