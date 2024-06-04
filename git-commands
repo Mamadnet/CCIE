@@ -1,0 +1,17 @@
+
+git init
+git add .
+git commit -m "First commit"
+git branch -m main
+git remote add origin https://github.com/Mamadnet/CCIE.git
+git pull https://github.com/Mamadnet/CCIE.git main --allow-unrelated-histories
+git push origin main
+
+
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
