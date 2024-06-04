@@ -8,7 +8,7 @@ git pull https://github.com/Mamadnet/CCIE.git main --allow-unrelated-histories
 git push origin main
 
 
-
+git config --global --edit
     git config --global user.name "Your Name"
     git config --global user.email you@example.com
 
