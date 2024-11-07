@@ -10,6 +10,13 @@ configure-network
 or
 
 sudo configure-network
+configure manager add  ----- tcp port 8305
+
+$route -n
+$sudo ping 1.1.1.1
+$sudo su
+admin#sftunnels_status.py
+
 
 ftd =======================================================
 
@@ -24,3 +31,17 @@ lina:
 linux shell:
     >expert
     admin@ftd1:~$ifconfig
+
+>show network
+>ping 2.2.2.2
+>ping system 2.2.2.2
+>expert
+$ping 2.2.2.2
+$route -network
+>show managers
+>configure manager add  fmc-ip KEY-id nat-id
+Manager successfully configured.
+Please make note of reg key as this will be required while adding Device in FMC.
+
+>expertnetstat -antp | grep 8305
+>sftunnels_status
