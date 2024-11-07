@@ -20,3 +20,7 @@ lina:
     >system support diagnostic-cli 
     firepower>en
     firepower#
+    ctrl+a then d
+linux shell:
+    >expert
+    admin@ftd1:~$ifconfig
