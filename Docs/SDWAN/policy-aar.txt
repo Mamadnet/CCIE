@@ -1,0 +1,193 @@
+policy
+! The SLA Class that specifies the required tunnel performance                         
+  sla-class CUSTOM_REALTIME_SLA
+   latency 100
+   loss 2
+   jitter 30
+  !
+! The AAR policy that is composed of 'match' and 'action' sequence rules               
+app-route-policy _Corporate_Segment_Sample_AAR_Policy
+ vpn-list Corporate_Segment
+   sequence 1
+     match                                                                             
+      dscp 46                                                                          
+      source-ip 0.0.0.0/0
+     !
+! The sla-class action specifies the SLA Class and the preferred colors                
+     action
+      sla-class CUSTOM_REALTIME_SLA  preferred-color mpls                              
+     !
+    !
+ !
+! Additional lists used within the policy. In this case, these lists are used          
+! when the policy is applied.                                                          
+ lists
+  site-list BranchOffices
+   site-id 100-199
+  !
+  site-list DCs
+   site-id 10-50
+  !
+  vpn-list Corporate_Segment
+   vpn 10
+  !
+ !
+!
+! The AAR policy is applied to selected Site Lists and VPN Lists.                      
+! Note: There is no directionality to this policy.                                     
+apply-policy
+ site-list DCs
+ app-route-policy _Corporate_Segment_Sample_AAR_Policy
+ !
+ site-list BranchOffices
+ app-route-policy _Corporate_Segment_Sample_AAR_Policy
+ !
+!
+
+
+
+vSmart-1# show running-config policy
+policy
+ sla-class Bulk-Data
+  jitter 100
+  latency 300
+  loss 10
+!
+sla-class CUSTOM_REALTIME_SLA
+  latency 100
+  loss 2
+  jitter  30
+ !
+sla-class Voice-And-Video
+  jitter  30
+  latency 45
+  loss 2
+ !
+ app-route-policy _Corporate_Segment_Sample_AAR_Expanded
+  vpn-list Corporate_Segment
+   sequence 1
+    match
+     source-ip 0.0.0.0/0
+     dscp      46
+    !
+     ! When the backup-sla-preferred-color command is supplied, traffic is forwarded       
+    ! across that color or colors if no colors can meet the required SLA  
+    action
+     sla-class CUSTOM_REALTIME_SLA preferred-color mpls
+     backup-sla-preferred-color mpls
+    !
+   !
+   sequence 11
+    match
+     source-ip 0.0.0.0/0
+     app-list  REAL_TIME_APPS
+    !
+! When the strict command is supplied, traffic is forwarded across the                
+ ! preferred color if the preferred color is able to meet the SLA.  If the             
+ ! preferred color does not meet the SLA, but any other color does, the                
+ ! traffic will be forwarded on that tunnel.  If there are no colors that              
+ ! meet the required SLA, the traffic is dropped.  
+    action
+     sla-class CUSTOM_REALTIME_SLA strict preferred-color mpls
+    !
+   !
+   sequence 21
+    match
+     source-ip 0.0.0.0/0
+     app-list  TRUSTED_APPS
+    !
+    action
+     sla-class Voice-And-Video preferred-color biz-internet mpls
+    !
+   !
+   sequence 31
+    match
+source-ip 0.0.0.0/0
+    dscp 8
+!
+    action
+     sla-class Bulk-Data preferred-color biz-internet
+    !
+   !
+ !
+lists
+  vpn-list Corporate_Segment
+   vpn 10
+!
+  app-list REAL_TIME_APPS
+   app rtp
+   app sccp
+   app sip
+   app sip_soap
+   app skinny
+   app uaudp_rtp
+  !
+  app-list TRUSTED_APPS
+   app webex
+   app webex-app-sharing
+   app webex-audio
+   app webex-control
+   app webex-media
+   app webex-meeting
+   app webex_weboffice
+  !
+  site-list BranchOffices
+   site-id 100-199
+  !
+  site-list DCs
+   site-id 10-50
+  !
+ !
+!
+apply-policy
+ site-list BranchOffices
+  app-route-policy _Corporate_Segment_Sample_AAR_Policy_Expanded
+ !
+ site-list DCs
+  app-route-policy _Corporate_Segment_Sample_AAR_Policy_Expanded
+ !
+!
+vSmart-1#
+
+
+vSmart-1# show running-config policy
+<<<Output omitted for brevity>>>
+sla-class CUSTOM_REALTIME_SLA
+  loss    2
+  latency 100
+  jitter  30
+  fallback-best-tunnel                                                                 
+   criteria         latency                                                            
+   latency-variance 5                                                                  
+  !
+ !
+! SLA Class indicating latency as a fall-back criteria                                 
+ sla-class Voice-And-Video
+  loss    2
+  latency 45
+  jitter  30
+  fallback-best-tunnel                                                                 
+   criteria latency                                                                    
+app-route-policy Corporate_Segment_Sample_AAR_Expanded
+  vpn-list Corporate_Segment
+   sequence 1                                                                          
+    match
+     source-ip 0.0.0.0/0
+     dscp      46
+    !
+    action
+ ! When non-compliant SLA tunnels are available, the MPLS tunnels will                 
+ !satisfy requirements allowing the additional number of milliseconds specified        
+as variance                                                                            
+    sla-class CUSTOM_REALTIME_SLA preferred-color mpls fallback-to-best-path           
+<<< Omitted for Brevity>>>
+sequence 11
+    match
+     source-ip 0.0.0.0/0
+     app-list  TRUSTED_APPS
+    !
+    action
+! In contrast  to sequence 1, when no variance is specified, the fallback will occur   
+to the lowest latency available tunnel as criteria.                                    
+     sla-class Voice-And-Video preferred-color biz-internet fallback-to-best-path      
+<<< Omitted for Brevity>>>

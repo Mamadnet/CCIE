@@ -1,0 +1,136 @@
+!
+!
+!
+enable
+!
+configure terminal
+!
+hostname CSR6
+no ip domain-lookup
+ip domain name ine.com
+!
+logging console debugging
+logging monitor informational
+logging buffered informational
+no service timestamps
+ip http server
+enable password cisco
+!
+!
+line console 0
+ logging synchronous
+ exec-timeout 0 0
+!
+line vty 0 4
+ logging synchronous
+ password cisco
+!
+ipv6 unicast-routing
+ipv6 rip vrf-mode enable
+!
+vrf definition A
+ rd 100:1
+ route-target both 100:1
+ route-target import 100:2
+ address-family ipv4
+ address-family ipv6
+!
+vrf definition B
+ rd 100:2
+ route-target both 100:2
+ route-target import 100:1
+ address-family ipv4
+ address-family ipv6
+!
+!
+!
+interface GigabitEthernet2
+ no shutdown
+!
+interface GigabitEthernet2.16
+ encapsulation dot1q 16
+ vrf forwarding A
+ ip address 192.168.16.6 255.255.255.0 
+ ipv6 address fe80::6 link-local
+ ipv6 address 192:168:16::6/64
+ ipv6 rip INE enable
+!
+interface GigabitEthernet2.26
+ encapsulation dot1q 26
+ vrf forwarding A
+ ip address 192.168.26.6 255.255.255.0 
+ ipv6 address fe80::6 link-local
+ ipv6 address 192:168:26::6/64
+ ipv6 rip INE enable
+!
+interface GigabitEthernet2.67
+ encapsulation dot1q 67
+ ip address 192.168.67.6 255.255.255.0 
+ ipv6 address fe80::6 link-local
+ ipv6 address 192:168:67::6/64
+!
+interface GigabitEthernet2.68
+ encapsulation dot1q 67
+ vrf forwarding B
+ ip address 192.168.68.6 255.255.255.0 
+ ipv6 address fe80::6 link-local
+ ipv6 address 192:168:68::6/64
+ ospfv3 800 ipv6 area 0
+ ospfv3 800 ipv4 area 0
+!
+interface GigabitEthernet2.56
+ encapsulation dot1q 56
+ ip address 192.168.56.6 255.255.255.0 
+!
+interface Loopback0
+ ip address 192.168.1.6 255.255.255.255
+!
+router ospf 100
+ network 192.168.0.0 0.0.255.255 area 0
+ mpls ldp autoconfig
+!
+router rip
+ address-family ipv4 unicast vrf A
+  version 2
+  no auto-summary
+  network 192.168.16.0
+  network 192.168.26.0
+  redistribute bgp 100 metric 5
+!
+ipv6 router rip INE
+ address-family ipv6 vrf A
+  redistribute bgp 100 metric 5
+!
+router ospfv3 800
+ address-family ipv4 unicast vrf B
+  redistribute bgp 100
+ address-family ipv6 unicast vrf B
+  redistribute bgp 100
+!
+router bgp 100
+ neighbor 192.168.1.5 remote-as 100
+ neighbor 192.168.1.5 update-source Loopback0
+ neighbor 192.168.67.7 remote-as 700
+ address-family ipv4
+  neighbor 192.168.67.7 activate
+ address-family ipv6
+  neighbor 192.168.67.7 activate
+ address-family vpnv4 unicast
+  neighbor 192.168.1.5 activate
+ address-family vpnv6 unicast
+  neighbor 192.168.1.5 activate
+ address-family ipv4 unicast vrf A
+  redistribute rip metric 5
+ address-family ipv6 unicast vrf A
+  redistribute rip INE include-connected metric 5
+ address-family ipv4 vrf B
+  redistribute ospfv3 800 match internal external 1 external 2 nssa-external 1 nssa-external 2
+ address-family ipv6 vrf B
+   redistribute ospf 800 match internal external 1 external 2 nssa-external 1 nssa-external 2 include-connected
+!
+!
+end
+write memory
+!
+!
+!

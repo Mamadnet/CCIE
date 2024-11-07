@@ -1,0 +1,89 @@
+!
+!
+!
+enable
+!
+configure terminal
+!
+hostname SW3
+no ip domain-lookup
+ip domain name ine.com
+!
+logging console debugging
+logging monitor informational
+logging buffered informational
+no service timestamps
+enable password cisco
+!
+!
+line console 0
+ logging synchronous
+ exec-timeout 0 0
+!
+line vty 0 4
+ logging synchronous
+ password cisco
+!
+spanning-tree vlan 1-4094 priority 8192
+spanning-tree mode rapid-pvst
+spanning-tree logging 
+!
+!
+vtp version 2
+vtp mode server
+vtp domain IOSFW
+vtp password IOSFW
+!
+!
+vlan 12
+ name R1-R2
+!
+vlan 13
+ name R1-CSR3
+!
+vlan 16
+ name CSR1-CSR6
+!
+vlan 21
+ name CSR1-CSR2
+!
+vlan 24
+ name R2-CSR4
+!
+vlan 26
+ name CSR2-CSR6
+!
+vlan 35
+ name CSR3-CSR5
+!
+vlan 45
+ name CSR4-CSR5
+!
+vlan 56
+ name CSR5-CSR6
+!
+vlan 67
+ name CSR6-CSR7
+!
+vlan 68
+ name CSR6-CSR8
+!
+!
+!
+!
+interface range FastEthernet1/0/22 - 24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no shutdown
+!
+no ip routing
+no ipv6 unicast-routing
+!
+!
+!
+!
+end
+write memory
+!
+!
+!

@@ -1,0 +1,75 @@
+!
+!
+!
+enable
+!
+configure terminal
+!
+hostname R1
+no ip domain-lookup
+ip domain name ine.com
+!
+logging console debugging
+logging monitor informational
+logging buffered informational
+no service timestamps
+ip http server
+enable password cisco
+!
+!
+line console 0
+ logging synchronous
+ exec-timeout 0 0
+!
+line vty 0 4
+ logging synchronous
+ password cisco
+!
+ipv6 unicast-routing
+!
+ip dhcp excluded-address 10.10.12.1 10.10.12.99
+ip dhcp excluded-address 10.10.12.101 10.10.12.255
+!
+ip dhcp pool VLAN12_IPV4
+ network 10.10.12.0 255.255.255.0
+ dns-server 172.16.10.100 
+ domain-name inelab.local
+ default-router 10.10.12.11
+!
+ipv6 dhcp pool VLAN12_IPV6
+ address prefix 10:10:12::/64
+ dns-server 172:16:10::100
+ domain-name inelab.local
+ ipv6 dhcp server
+!
+!
+interface GigabitEthernet0/0
+ ip address 192.168.13.11 255.255.255.0
+ ipv6 address FE80::1 link-local
+ ipv6 address 192:168:13::11/64
+ no shutdown
+!
+interface GigabitEthernet0/1
+ ip address 10.10.12.11 255.255.255.0
+ ipv6 address fe80::11 link-local
+ ipv6 address 10:10:12::11/64
+ ipv6 nd router-preference High
+ ipv6 dhcp server 
+ no shutdown
+!
+interface Loopback0
+ ip address 10.10.10.11 255.255.255.255
+ ipv6 address 10:10:10::11/128
+!
+router eigrp INE
+ address-family ipv4 unicast autonomous-system 100
+  network 10.10.12.0 0.0.0.255
+  network 10.10.10.0 0.0.0.255
+address-family ipv6 unicast autonomous-system 100
+!
+!
+end
+write memory
+!
+!
+!

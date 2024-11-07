@@ -1,0 +1,23 @@
+sdwan-notes
+
+
+ TLS and DTLS use Advanced Encryption Standard (AES-256) encryption algorithm to encrypt all control traffic sent over the control connections. AES-256-GCM is also used for integrity, to ensure traffic has not been tampered with.
+
+
+ OMP also ensures the secure, automatic propagation and management of encryption keys used by the data plane. In the pairwise keys model, the Controller sends Diffie-Hellman public values to the WAN Edge devices, where they generate their own pairwise IPsec encryption keys.
+
+ 2024-09-27-12-13-50.png
+
+
+ In the pairwise keys model, the Cisco SD-WAN Controller sends Diffie-Hellman public values to the edge devices, and they generate pairwise IPsec encryption keys using Elliptic-curve Diffie-Hellman (ECDH) and a P-384 curve. For more information    
+
+
+ By default, IPsec tunnel connections use an enhanced version of the Encapsulating Security Payload (ESP) protocol for authentication on IPsec tunnels.
+
+ Integrity: To guarantee that data traffic is transmitted across the network without being tampered with, the data plane implements several mechanisms from the IPsec security protocol suite:
+
+An enhanced version of the ESP protocol encapsulates the payload of data packets.
+
+The enhanced version of ESP uses an AH-like mechanism to check the integrity of the outer IP and UDP headers. You can configure the integrity methods supported on each router, and this information is exchanged in the router's TLOC properties. If two peers advertise different authentication types, they negotiate the type to use, choosing the strongest method.
+
+The anti-replay scheme protects against attacks in which an attacker duplicates encrypted packets.

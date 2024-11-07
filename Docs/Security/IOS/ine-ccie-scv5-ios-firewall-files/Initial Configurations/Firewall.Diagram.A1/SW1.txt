@@ -1,0 +1,141 @@
+!
+!
+!
+enable
+!
+configure terminal
+!
+hostname SW1
+no ip domain-lookup
+ip domain name ine.com
+!
+logging console debugging
+logging monitor informational
+logging buffered informational
+no service timestamps
+enable password cisco
+!
+!
+line console 0
+ logging synchronous
+ exec-timeout 0 0
+!
+line vty 0 4
+ logging synchronous
+ password cisco
+!
+spanning-tree vlan 1-4094 priority 0
+spanning-tree mode rapid-pvst
+spanning-tree logging 
+!
+!
+vtp version 2
+vtp mode server
+vtp domain IOSFW
+vtp password IOSFW
+!
+!
+vlan 12
+ name R1-R2
+!
+vlan 13
+ name R1-CSR3
+!
+vlan 16
+ name CSR1-CSR6
+!
+vlan 21
+ name CSR1-CSR2
+!
+vlan 24
+ name R2-CSR4
+!
+vlan 26
+ name CSR2-CSR6
+!
+vlan 35
+ name CSR3-CSR5
+!
+vlan 45
+ name CSR4-CSR5
+!
+vlan 56
+ name CSR5-CSR6
+!
+vlan 67
+ name CSR6-CSR7
+!
+vlan 68
+ name CSR6-CSR8
+!
+!
+!
+interface FastEthernet1/0/1
+ switchport mode access
+ switchport access vlan 13
+ spanning-tree portfast
+ no shutdown
+!
+interface FastEthernet1/0/2
+ switchport mode access
+ switchport access vlan 24
+ spanning-tree portfast
+ no shutdown
+!
+interface FastEthernet1/0/3
+ switchport mode access
+ switchport access vlan 21
+ spanning-tree portfast
+ no shutdown
+!
+interface FastEthernet1/0/4
+ switchport mode access
+ switchport access vlan 13
+ spanning-tree portfast
+ no shutdown
+!
+interface FastEthernet1/0/18
+ switchport mode access
+ switchport access vlan 12
+ switchport voice vlan 1
+ spanning-tree portfast
+ no shutdown
+!
+!
+interface range FastEthernet1/0/22 - 24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no shutdown
+!
+ip routing
+ipv6 unicast-routing
+
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan12
+ ip address 10.10.12.13 255.255.255.0
+ ipv6 address fe80::13 link-local
+ ipv6 address 10:10:12::13/64
+ no shutdown
+!
+interface Loopback0
+ ip address 10.10.10.13 255.255.255.255
+ ipv6 address 10:10:10::13/128
+!
+router eigrp INE
+ address-family ipv4 unicast autonomous-system 100
+  network 10.10.12.0 0.0.0.255
+  network 10.10.10.0 0.0.0.255
+address-family ipv6 unicast autonomous-system 100
+!
+!
+!
+!
+end
+write memory
+!
+!
+!

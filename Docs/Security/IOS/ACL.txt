@@ -1,0 +1,77 @@
+ACL
+
+
+(config)#access-list ?
+  <1-99>            IP standard access list
+  <100-199>         IP extended access list
+  <1300-1999>       IP standard access list (expanded range)
+  <2000-2699>       IP extended access list (expanded range)
+  acl-ace-limit     set the max configurable ace limit for all ACLs
+  acl-limit         Set the max configurable acl limit
+  dynamic-extended  Extend the dynamic ACL absolute timer
+  global-ace-limit  set the max ace limit for the entire system
+  rate-limit        Simple rate-limit specific access list
+
+
+
+(config)#ip access-list ?
+  extended    Extended Access List
+  helper      Access List acts on helper-address
+  log-update  Control access list log updates
+  logging     Control access list logging
+  persistent  enable persistency across reload
+  resequence  Resequence Access List
+  role-based  Role-based Access List
+  standard    Standard Access List
+
+
+Can be of two types
+• Standard
+• Extended
+Configuration wise, both standard and extended can
+be
+• Numbered (legacy, identified by a number)
+• Named (identified by a meaningful name)
+
+Standard ACL
+    Inbound ACL is for data and Control traffic
+    standard ACL is not for layer 4
+    it only usematches source ip header
+    ehen it is used on vty outbound - it matches destination ip header
+Considerations
+    • An empty ACL uses an implicit ‘permit any’
+    • Not recommended to be applied inbound
+    • When applied inbound, ensure to allow IPv4 control-plane/
+    management-plane traffic
+
+
+
+Extended ACL
+
+    • Can match the protocol number from the layer 3 header
+    (OSPF, EIGRP, ESP, AH)
+    • Can match on both source and destination IP from the
+    layer 3 header
+    • Can match on the layer 4 protocol and its ports (TCP, UDP)
+
+    • Can match on the TCP flags, IPv4/IPv6 options
+    • Can match on IPv4/IPv6 fragments
+    • Can match on IPv4/IPv6 packet marking (Precedence,
+    DSCP)
+
+Considerations
+
+    • An empty ACL uses an implicit ‘permit any any’
+    • When applied inbound, ensure to allow IPv4/IPv6 controlplane
+    traffic
+
+
+IPv6 used ICMPv6 packets for two main reasons
+    • Neighbor discovery (what was ARP in IPv4)
+    • Router discovery (IPv6 host auto-addressing via SLAAC)
+ICMPv6 ND packets
+    • Neighbor discovery uses the NS and NA messages
+    • Router Discovery use the RS and RA messages
+Cisco claims that, when inbound IPv6 ACL is applied
+    • ICMPv6 (NS,NA,RS,RA) messages are implicitly allowed,
+    but don’t rely on it

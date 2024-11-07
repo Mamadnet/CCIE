@@ -1,0 +1,89 @@
+config
+hostname
+enable password
+
+config
+int gi0/1
+nameif INSIDE
+security-level 100
+
+int gi0/0
+nameif OUTSIDE
+security-level 0
+
+
+route INSIDE 10.0.0.0 255.255.255.0 10.0.0.50
+route OUTSIDE 0.0.0.0 0.0.0.0 155.1.2.2
+
+
+sh run object
+object service 0-80
+service tcp destination eq www
+object service 0-443
+service tcp destination eq https
+object service 0-23
+service tcp destination eq telnet
+
+
+
+sh run object-group
+object-group network OG-Net1
+network-object 10.0.0.0 255.255.255.0
+network-object 1.1.1.1 255.255.255.255
+object-group service OG-8023
+service-object tcp destination eq telnet
+service-object tcp destination eq www
+
+
+
+
+
+=======================================
+
+dynamic NAT in unidirectional, static nat is 2way
+First section 1 on globally 
+Second section 2 under object with mentioning source keyword
+last section 3
+
+to clear nat sessions:
+clear xlate
+
+· Example 1
+· In this example when 192.168.65.0 who is behind inside segment accesses any destination on the outside segment, the source 192.168.65.0/24 would be translated to any ip from the pool 74.0.0.150-74.0.0.160. The
+Source Port, Destination Port and Destination IP remains unchanged.
+    object network OBJECT-REAL
+    subnet 192.168.65.0 255.255.255.0
+    object network OBJECT-MAPPED
+    range 74.0.0.150 74.0.0.160
+    nat (INSIDE, OUTSIDE) source dynamic OBJECT-REAL OBJECT-MAPPED
+
+ASAx1(config)# sh nat
+Manual NAT Policies (Section 1)
+1 (INSIDE) to (OUTSIDE) source dynamic OBJECT-REAL OBJECT-MAPPED
+translate hits = 0, untranslate hits = 0
+---------------------------------------
+
+
+sh run object
+    object network OBJECT-REAL
+    subnet 192.168.65.0 255.255.255.0
+    object network OBJECT-MAPPED
+    range 74.0.0.150 74.0.0.160
+sh run nat
+!
+    object network OBJECT-REAL
+    nat (INSIDE, OUTSIDE) dynamic OBJECT-MAPPED
+sh nat
+
+Auto NAT Policies (Section 2)
+1 (INSIDE) to (OUTSIDE) source dynamic OBJECT-REAL OBJECT-MAPPED
+translate_hits = 0, untranslate_hits = 0
+=======================================
+
+
+
+show run interface
+show route
+show route INSIDE
+
+

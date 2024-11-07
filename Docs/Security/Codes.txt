@@ -1,0 +1,76 @@
+
+aaa [authentication | authorization | accounting] service [name | default] method
+
+aaa new-model
+aaa authentication login AUTHC group tacacs+
+aaa authorization exec SHELL group tacacs+
+aaa authorization commands 5 CMD group tacacs+
+aaa session-id common
+
+#aaa authentication login NO none
+#line con 0
+#login authen NO
+#Exit
+#no aaa authorization console
+
+**********************
+aaa authorization config-commands 
+**********************
+
+
+
+privilege configure level 5 router
+privilege exec level 5 configure terminal
+privilege exec level 5 configure
+
+
+
+line con 0
+exec-timeout 0 0
+logging synchronous level 0 limit 20
+login authentication NO
+
+line vty 0 5
+authorization commands 5 CMD
+authorization exec SHELL
+login authentication AUTHC
+transport input none
+R1#
+
+
+#######################################################################
+aaa new-model
+aaa authentication dot 1x default group radius
+aaa authorization network default group radius
+aaa accounting dot 1x default start-stop group radius
+aaa server radius dynamic-author
+client 172.16.3. 101 server-key cisco123
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server host 172. 16.3. 101 key cisco123
+radius-server vsa send accounting
+radius-server vsa send authentication
+dot 1x system-auth-control
+
+int f1/0/18
+authentication host-mode multi-auth
+authentication event fail action next-method
+authentication order dot 1x mab
+authentication priority dot 1x mab
+authentication port-control auto
+mab
+dot 1x pae authenticator
+dot 1x timeout tx-period 10
+switchport access vlan voip  !#it should be configured
+
+exit
+ip device tracking !### for dACL
+
+#######################################################################
+##### authorization profile ip-phone
+
+Voice Domain Permission
+Access Type = ACCESS_ACCEPT
+DACL = PERMIT_ALL_TRAFFIC
+cisco-av-pair = device-traffic-class=voice

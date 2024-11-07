@@ -1,0 +1,326 @@
+sudo apt install build-essential checkinstall zlib1g-dev -y
+
+
+########################################
+
+
+adding certificate to sdwan from linux
+    create CA on CA server
+
+    openssl genrsa -out CA.key 2048
+    openssl req  -new -x509 -days 2000 -key CA.key  -out CA.crt
+
+    send to all nodes
+    scp CA.crt admin@192.168.198.106:
+
+    admin connected from 127.0.0.1 using console on vmanage
+    vmanage# vshell 
+    vmanage:~$ pwd
+    /home/admin
+    vmanage:~$ ls
+
+
+    request  root-cert-chain install /home/admin/CA.crt 
+
+https://vmanage-ip-address/dataservice/system/device/sync/rootcertchain
+
+
+generate csr from gui on certificate tab and then generate crt from csr for each node by below commands on CA server
+
+openssl x509 -req -in vmanage.csr -CA CA.crt  -CAkey CA.key -CAcreateserial -out vmanage.crt -days 2000 -sha256
+openssl x509 -req -in vbond.csr -CA CA.crt -CAkey CA.key -CAcreateserial -out vbond.crt -days 2000 -sha256
+openssl x509 -req -in vsmart.csr -CA CA.crt -CAkey CA.key -CAcreateserial -out vsmart.crt -days 2000 -sha256
+
+
+then from gui go to certificae and install certificate for each node
+
+########################################
+vbond
+
+Configuration
+vpn 0
+interface g0/0
+tunnel-interface
+encapsulation ipsec
+commit and-quit
+
+vmanage and vsmart
+config 
+vpn 0
+interface eth0
+tunnel-interface
+commit and-quit
+
+####################################
+
+vEdge2
+--------
+config
+system
+ host-name vEdge-10
+ system-ip 7.7.7.10
+ site-id 10
+ organization-name "org" 
+ vbond 10.10.1.106 
+vpn 0
+ ip route 0.0.0.0/0 172.16.10.1
+ interface ge0/1
+  ip address 172.16.10.10/24
+   no tunnel-interface
+   no shutdown
+commit and-quit
++++++++++++++++
+
+!
+vpn 0
+ interface ge0/0
+  ip dhcp-client
+  ipv6 dhcp-client
+  tunnel-interface
+   encapsulation ipsec
+   no allow-service bgp
+   allow-service dhcp
+   allow-service dns
+   allow-service icmp
+   no allow-service sshd
+   no allow-service netconf
+   no allow-service ntp
+   no allow-service ospf
+   no allow-service stun
+   allow-service https
+  !
+  no shutdown
+ !
+ interface ge0/1
+  ip address 172.16.10.10/24
+  no shutdown
+
+request root-cert-chain  install /home/admin/CA.crt
+  openssl x509 -req -in cedge.csr -CA CA.crt  -CAkey CA.key -CAcreateserial -out cedge.crt -days 2000 -sha256
+
+
+debug vdaemon misc high
+show log tail -f /var/log/tmplog/vdebug
+
+
+
+#########################################################
+#########################################################
+#########################################################
+
+for vedge device boot strap config
+1
+vEdge1# request csr upload home/admin/vedge33.csr
+2
+root@user1:~#  scp admin@172.16.10.10:/home/admin/vedge1_csr .
+3
+openssl x509 -req -in vedge33.csr -CA CA.crt  -CAkey CA.key -CAcreateserial -out vedge33.crt -days 2000 -sha256
+4
+scp vedge1.crt admin@172.16.10.10:vedge1.crt
+5
+request    certificate install /home/admin/vedge1.crt
+6
+ show certificate serial 
+7
+ request vedge-cloud activate chassis-num 852a1b50-6ae9-4597-9b65-f45db1d82ffc  token 2926E7A4725BF4216BE1E4BFD47DEEB8456D84BE
+8
+on Controllers
+request vedge add chassis-num 852a1b50-6ae9-4597-9b65-f45db1d82ffc  serial-num 2926E7A4725BF4216BE1E4BFD47DEEB8456D84BE
+
+#########################################################
+#########################################################
+#########################################################
+
+  enable
+  config-trans
+
+  hostname cEdge
+  system
+  system-ip 7.7.7.30
+  site-id 30
+  admin-tech-on-failure
+  organization-name "org"
+  vbond 10.10.1.106
+
+  interface GigabitEthernet1
+  no shut
+  ip address 172.16.10.30 255.255.255.0
+  exit
+  ip route 0.0.0.0 0.0.0.0 172.16.10.1
+  no ip domain lookup
+
+#########################################################
+#########################################################
+#########################################################
+for cedge device
+1
+scp CA.crt admin@172.16.10.30:CA.crt
+request platform software sdwan root-cert-chain install bootflash:CA.crt
+
+2
+request platform software sdwan csr upload bootflash:edge1.csr
+
+3
+vmanage:~$ scp admin@172.16.10.30:cedge1.csr cedge1.csr
+4.
+vmanage:~$ scp cedge1.csr user@10.10.1.109:
+5
+openssl x509 -req -in edge1.csr -CA CA.crt  -CAkey CA.key -CAcreateserial -out edge1.crt -days 2000 -sha256
+6
+vmanage:~$  scp  user@10.10.1.109:cedge1.crt cedge1.crt
+vmanage:~$  scp cedge1.crt admin@172.16.10.30:cedge1.crt
+7.
+cEdge#request platform software sdwan certificate install bootflash:cedge.crt
+8.
+cEdge#show sdwan certificate serial 
+Chassis number: CSR-9b0b89b7-31d0-424f-aad4-5bbe3b33061b serial number: 5500F627C3E41755749E626C40F06A37E892AAB4
+
+9
+on Controllers
+request vedge add chassis-num CSR-0f93e102-be84-4713-aeda-6d0d3f1daad5  serial-num 2926E7A4725BF4216BE1E4BFD47DEEB8456D84BF
+request vedge add chassis-num 852a1b50-6ae9-4597-9b65-f45db1d82ffc  serial-num 2926E7A4725BF4216BE1E4BFD47DEEB8456D84BE
+
+#########################################################
+#########################################################
+#########################################################
+
+config-trans
+
+interface Tunnel10
+no shut
+ip unnumbered GigabitEthernet1
+tunnel source GigabitEthernet1
+tunnel mode sdwan
+
+sdwan
+interface GigabitEthernet1
+tunnel-interface
+encapsulation ipsec
+color default
+
+commit end
+
+debug vdaemon misc high
+show log tail -f /var/log/tmplog/vdebug
+
+
+
+vBond# show log tail -f /var/log/tmplog/vdebug
+local7.debug: Aug  1 13:16:55 vBond VBOND[2576]: vdaemon_verify_callback[409]: %VDAEMON_DBG_MISC-1: Verify failed: self signed certificate! No need to panic!! 
+local7.debug: Aug  1 13:16:55 vBond VBOND[2576]: vdaemon_verify_callback[409]: %VDAEMON_DBG_MISC-1: Verify failed: self signed certificate! No need to panic!! 
+local7.debug: Aug  1 13:16:55 vBond VBOND[2576]: vbond_handshake_event_cb[6626]: %VDAEMON_DBG_MISC-1: Get CA RSA Public key
+local7.debug: Aug  1 13:16:55 vBond VBOND[2576]: vdaemon_verify_peer_bidcert[341]: %VDAEMON_DBG_MISC-1: Peer's Certificate validation Failed (expected Viptela) got "Viptela LLC" 
+local7.info: Aug  1 13:16:55 vBond VBOND[2576]: %Viptela-vBond-vbond_0-6-INFO-1400002: Notification: 8/1/2022 13:16:55 vbond-reject-vedge-connection severity-level:major host-name:"vBond" system-ip:7.7.7.106 uuid:"CSR-9b0b89b7-31d0-424f-aad4-5bbe3b33061b" organization-name:"org" sp-organization-name:"org" reason:"ERR_BID_NOT_VERIFIED" 
+local7.info: Aug  1 13:16:55 vBond VBOND[2576]: %Viptela-vBond-vbond_0-6-INFO-1400002: Notification: 8/1/2022 13:16:55 control-connection-auth-fail severity-level:major host-name:"vBond" system-ip:7.7.7.106 personality:vbond peer-type:vedge peer-system-ip::: local-system-ip:7.7.7.106 local-color:default reason:"ERR_BID_NOT_VERIFIED" 
+
+
+
+
+vshell
+cat /var/log/vsyslog
+
+monitor start /var/log/vsyslog
+
+
+
+
+tclsh
+puts [open "flash:CA.crt" w+] {
+-----BEGIN CERTIFICATE-----
+MIIDkTCCAnmgAwIBAgIUJ+xSWWxwwBN0yGK9xe44IWDzcYkwDQYJKoZIhvcNAQEL
+BQAwWDELMAkGA1UEBhMCUFQxDzANBgNVBAgMBkxpc2JvbjEPMA0GA1UEBwwGTGlz
+Ym9uMQwwCgYDVQQKDANvcmcxDDAKBgNVBAsMA29yZzELMAkGA1UEAwwCY2EwHhcN
+MjQwOTAxMTYzMDU1WhcNMzAwMjIyMTYzMDU1WjBYMQswCQYDVQQGEwJQVDEPMA0G
+A1UECAwGTGlzYm9uMQ8wDQYDVQQHDAZMaXNib24xDDAKBgNVBAoMA29yZzEMMAoG
+A1UECwwDb3JnMQswCQYDVQQDDAJjYTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAKSyPpj5JaKnxZ0l1OgDsiz+yQLjqwUqICrhyyH8PBfGJVdTlMmNI72c
+sGKY0MK5SWKlE5g2pgd0ETW4towH+YxFSgks9mziRgIBNvxV0Ne+HJdTnmUPSTgh
+aZMOkvNVxxLQ4Lg6ugvG3XQQTPFgfcp+0GNLbsgCmdQsZ33UJkx2zv3se8QrjhM+
+gCVAmPYlPNtmW1HL3P5O3xVkRaM0gmLnEScrVUM9Pfj51oqpEXj8YKTXK/Mq4ueA
+xZw+sE3d0sSEGZ7VMMD7NbjUKrFxRyO9q7CYwwIUOfAK+9CM8FtgCnY94lO5bSoX
+ZWv8/3TXUlDRuZh3ZNuik0ZLxPWwWJECAwEAAaNTMFEwHQYDVR0OBBYEFPbzJuM4
+vw73z/Mp/vzHBduIdO14MB8GA1UdIwQYMBaAFPbzJuM4vw73z/Mp/vzHBduIdO14
+MA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAGphbWXnvR94zDQJ
+lUp0Il/jSTm9i1QWemszSCFlz1xXsMSKFyr0WNXaYKBUK+KnXilQJDe/X2HZr4yS
+m2IRhqp986WQg10yf7FKLA0/qjnrF1E+EtMk1ojhpeXxLHfYdbPFhNfBpXQFerim
+aM8MEKSI+TYq4u+4C1xGUdOdlqkAbX1iB5JgAJAoQTejl9VCmWNOpBOvRwwzfROE
+DiseO37Gr+J5nMw4kPPQC4p/t3AJiXA6eK5X0AUbQmFc3OkhWBloiwhRssSHQRlM
+0sa2tJKtvbCjgSmgbWBrQLz2W393T80aPhJRciOI0WEd4aHxT0Oc+qi36pCDfnQP
+x2sww2M=
+-----END CERTIFICATE-----
+}
+exit
+
+
+tclsh
+puts [open "flash:cedge24.crt" w+] {
+-----BEGIN CERTIFICATE-----
+MIIDpDCCAowCFFjKhanVKfY/kFZZvByIpNJlGdp0MA0GCSqGSIb3DQEBCwUAMFgx
+CzAJBgNVBAYTAlBUMQ8wDQYDVQQIDAZMaXNib24xDzANBgNVBAcMBkxpc2JvbjEM
+MAoGA1UECgwDb3JnMQwwCgYDVQQLDANvcmcxCzAJBgNVBAMMAmNhMB4XDTI0MTAw
+OTE2MzMyMloXDTMwMDQwMTE2MzMyMlowgcQxCzAJBgNVBAYTAlVTMRMwEQYDVQQI
+EwpDYWxpZm9ybmlhMREwDwYDVQQHEwhTYW4gSm9zZTEMMAoGA1UECxMDb3JnMRQw
+EgYDVQQKEwtWaXB0ZWxhIExMQzFFMEMGA1UEAxM8dmVkZ2UtQ1NSLTBmOTNlMTAy
+LWJlODQtNDcxMy1hZWRhLTZkMGQzZjFkYWFkNS0zLnZpcHRlbGEuY29tMSIwIAYJ
+KoZIhvcNAQkBFhNzdXBwb3J0QHZpcHRlbGEuY29tMIIBIjANBgkqhkiG9w0BAQEF
+AAOCAQ8AMIIBCgKCAQEAnXRAQiNKl8+kpRu1xKByYvJeaAetvJEfrS461zXL9Y47
+5cx3IRjAKfP4/pN/0tSAuZ1Gf9XMhAh6mQIq3wGcfd289fp//WhqZb6JGCLf1ysf
+Pn/+vXI3TjULOvfV/uCdGouRc2MTIsPH8t7Cq9ssfpGSi9Myj0UfEeQ2mMI4AQrZ
+FSj8xlvdQ54Rs5+d3Inb+uf7RrM62nTo1Atqv3EizJtfUht8GuJr6njBtyxuMqVf
+ymfT/6k6LoZsOFKC+sgE5g3lTH/6e3Kw86RcCSl5rNOxFqS+D5RjpZHzbv8vXy7v
+Lw6eyMU7bHg5qLw1G9I4goFs2YByOyTJ7KmKqY1RewIDAQABMA0GCSqGSIb3DQEB
+CwUAA4IBAQA1Ob/o9MKgmzCQr8Vi91aXaJdrfgvsXutuwAmABtW/vVMEnoLAfnHH
+RPAMUU0RS0RIfo/gu5baH2iNwqcvaaq0AUC93pIVaDaRydJy+inVPUKrNa2XpR7Y
++CPIiqsSygRHYAJURussmIuTx/M6zRLB3wctwso1NJqb7XKVsHbzm02MivCDl2cB
+UhVKI39KnJTJyMvlt179Hu/UAn+p1eag3Em9/j1hYU8rYTECmN2447li9K61cf/x
+vKZFuY4Yn9y9T4i9PSwBZRhUPPgmTT0pwosvx+YEKFarmIkfhgDSZrY5xy2IlN7h
+9OTc5bzaoF5mjsRRr26pZMRjog+IMEXK
+-----END CERTIFICATE-----
+
+}
+exit
+
+ request vedge add chassis-num CSR-0f93e102-be84-4713-aeda-6d0d3f1daad5 serial-num 58CA85A9D529F63F905659BC1C88A4D26519DA74
+
+
+conf t
+int range ethernet 0/0 - 3
+sh
+no sh
+int range ethernet 1/0 - 3
+sh
+no sh
+int range ethernet 2/0 - 3
+sh
+no sh
+int range ethernet 3/0 - 3
+sh
+no sh
+int range ethernet 4/0 - 3
+sh
+no sh
+int range ethernet 5/0 - 3
+sh
+no sh
+int range ethernet 6/0 - 3
+sh
+no sh
+int range ethernet 7/0 - 3
+sh
+no sh
+end
+
+tclsh
+puts [open " system:/ports.tcl" w+] {
+ios_config "int range ethernet 0/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 1/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 2/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 3/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 4/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 5/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 6/0 - 3" "shutdown" "no shutdown"
+ios_config "int range ethernet 7/0 - 3" "shutdown" "no shutdown"
+}
+exit
+!
+tclsh ports.tcl

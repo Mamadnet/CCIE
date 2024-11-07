@@ -1,0 +1,62 @@
+!
+!
+!
+enable
+!
+configure terminal
+!
+hostname CSR7
+no ip domain-lookup
+ip domain name ine.com
+!
+logging console debugging
+logging monitor informational
+logging buffered informational
+no service timestamps
+ip http server
+enable password cisco
+!
+!
+line console 0
+ logging synchronous
+ exec-timeout 0 0
+!
+line vty 0 4
+ logging synchronous
+ password cisco
+!
+ipv6 unicast-routing
+!
+!
+interface GigabitEthernet2
+ no shutdown
+!
+interface GigabitEthernet2.67
+ encapsulation dot1q 67
+ ip address 192.168.67.7 255.255.255.0 
+ ipv6 address fe80::7 link-local
+ ipv6 address 192:168:67::7/64
+!
+interface Loopback0
+ ip address 7.7.7.7 255.255.255.255
+ ipv6 address 7:7:7::7/128
+!
+route-map IPV6_NH permit 10
+ set ipv6 next-hop 192:168:67::7
+!
+router bgp 700
+ neighbor 192.168.67.6 remote-as 100
+address-family ipv4 unicast
+ neighbor 192.168.67.6 activate
+ network 7.7.7.7 mask 255.255.255.255
+address-family ipv6 unicast
+ neighbor 192.168.67.6 activate
+ network 7:7:7::7/128
+ neighbor 192.168.67.6 route-map IPV6_NH out
+!
+!
+end
+write memory
+!
+!
+!

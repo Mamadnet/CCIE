@@ -1,0 +1,65 @@
+!
+!
+!
+enable
+!
+configure terminal
+!
+hostname CSR2
+no ip domain-lookup
+ip domain name ine.com
+!
+logging console debugging
+logging monitor informational
+logging buffered informational
+no service timestamps
+ip http server
+enable password cisco
+!
+!
+line console 0
+ logging synchronous
+ exec-timeout 0 0
+!
+line vty 0 4
+ logging synchronous
+ password cisco
+!
+ipv6 unicast-routing
+!
+!
+interface GigabitEthernet1
+ ip address 172.16.10.2 255.255.255.0
+ ipv6 address fe80::2 link-local
+ ipv6 address 172:16:10::2/64
+ ipv6 rip INE enable
+ no shutdown
+!
+interface GigabitEthernet2
+ no shutdown
+!
+interface GigabitEthernet2.26
+ encapsulation dot1q 26
+ ip address 192.168.26.2 255.255.255.0
+ ipv6 address fe80::2 link-local
+ ipv6 address 192:168:26::2/64
+ ipv6 rip INE enable
+!
+interface Loopback0
+ ip address 10.10.10.2 255.255.255.255
+ ipv6 address 10:10:10::2/128
+ ipv6 rip INE enable
+!
+router rip
+ version 2
+ no auto-summary
+ network 10.0.0.0
+ network 172.16.0.0
+ network 192.168.26.0
+!
+!
+end
+write memory
+!
+!
+!

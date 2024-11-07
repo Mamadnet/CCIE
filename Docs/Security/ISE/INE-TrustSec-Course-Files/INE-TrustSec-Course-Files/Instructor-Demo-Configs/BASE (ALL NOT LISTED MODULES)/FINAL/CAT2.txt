@@ -1,0 +1,283 @@
+ena
+conf t
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname SW2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+switch 1 provision ws-c3750x-24p
+system mtu routing 1500
+!
+
+!
+vtp file vlan.dat
+vtp domain INE
+vtp mode transparent
+!
+
+!
+license boot level ipbase
+!
+
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+
+!
+vlan internal allocation policy ascending
+!
+vlan 10
+ name ACS1
+!
+vlan 11 
+!
+vlan 20
+ name ACS2
+!
+vlan 30
+ name ISE1
+!
+vlan 40
+ name ISE2
+!
+vlan 50
+ name WSA1-M1
+!
+vlan 60   
+ name WSA2-M1
+!
+vlan 70
+ name ESA1-M1
+!
+vlan 80
+ name ESA2-M1
+!
+vlan 90
+ name WLC-MGMT
+!
+vlan 91
+ name WLC-DATA
+!
+vlan 100
+ name TESTSRV-A
+!
+vlan 110
+ name NGIPS1-MGMT
+!
+vlan 111
+ name NGIPS1-INT
+!         
+vlan 112
+ name NGIPS1-EXT
+!
+vlan 120
+ name NGIPS2-MGMT
+!
+vlan 121
+ name NGIPS2-INT
+!
+vlan 122
+ name NGIPS2-EXT
+!
+vlan 130
+ name FTD1-M0
+!
+vlan 131
+ name FTD1-G0
+!
+vlan 132
+ name FTD1-G1
+!
+vlan 140
+ name FTD2-M0
+!
+vlan 141
+ name FTD2-G0
+!
+vlan 142
+ name FTD2-G1
+!
+vlan 150
+ name FMC1
+!
+vlan 160
+ name FMC2
+!
+vlan 200
+ name TESTSRV-B
+!
+vlan 230
+ name IP-PHONE-A-DATA
+!
+vlan 231
+ name IP-PHONE-A-VO
+!
+vlan 240  
+ name IP-PHONE-B-DATA
+!
+vlan 241
+ name IP-PHONE-B-VO
+!
+vlan 310
+ name ASAV1-M0
+!
+vlan 311
+ name ASAV1-G0
+!
+vlan 312
+ name ASAV1-G1
+!
+vlan 320
+ name ASAV2-M0
+!
+vlan 321
+ name ASAV2-G0
+!
+vlan 322
+ name ASAV2-G1
+!         
+vlan 330
+ name ASAV3-M0
+!
+vlan 331
+ name ASAV3-G0
+!
+vlan 332
+ name ASAV3-G1
+!
+vlan 340
+ name ASAV4-M0
+!
+vlan 341
+ name ASAV4-G0
+!
+vlan 342
+ name ASAV4-G1
+
+!
+interface FastEthernet0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/0/1
+ description TO R1 Gi0/1
+ switchport access vlan 200
+ switchport mode access
+ spanning-tree portfast edge
+  ip device tracking probe interval 31
+!
+interface GigabitEthernet1/0/2
+ description TO R2 Gi0/1
+ switchport access vlan 200
+ switchport mode access
+ spanning-tree portfast edge
+ ip device tracking maximum 10
+!
+!
+interface GigabitEthernet1/0/9
+ description TO ASAx1 Gi0/2
+ switchport access vlan 200
+ switchport mode access
+ spanning-tree portfast edge
+!
+interface GigabitEthernet1/0/10
+ description TO ASAx1 Gi0/3
+!
+interface GigabitEthernet1/0/11
+ description TO ASAx1 Gi0/4
+!
+interface GigabitEthernet1/0/12
+ description TO ASAx2 Gi0/2
+!
+interface GigabitEthernet1/0/13
+ description TO ASAx2 Gi0/3
+!
+interface GigabitEthernet1/0/14
+ description TO ASAx2 Gi0/4
+!
+interface GigabitEthernet1/0/15
+ description TO WLC G0/0/1
+ switchport trunk allowed vlan 90,91
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast edge trunk
+!
+interface GigabitEthernet1/0/16
+!
+interface GigabitEthernet1/0/17
+!
+interface GigabitEthernet1/0/18
+ description TO CISCO PHONE B - TEST-PC-B
+ switchport access vlan 240
+ switchport mode access
+ switchport voice vlan 241
+ spanning-tree portfast edge
+!
+!
+interface GigabitEthernet1/0/23
+ description TO SW1 Fa1/0/23
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ip device tracking probe interval 31
+ ip device tracking maximum 10
+!
+interface GigabitEthernet1/0/24
+ description TO vSWITCH
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan30
+ ip address 172.16.3.22 255.255.255.0
+!
+aaa new-model
+aaa authentication dot1x default group radius
+aaa authorization network default group radius 
+aaa accounting dot1x default start-stop group radius
+aaa authentication login NO none
+aaa authentication login VTY local
+aaa authorization exec VTYZ local
+aaa server radius dynamic-author
+ client 172.16.3.100 server-key cisco
+ip device tracking
+radius server ISE
+ address ipv4 172.16.3.100 auth-port 1812 acct-port 1813
+!
+radius-server vsa send accounting
+radius-server vsa send authentication
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+
+line con 0
+ exec-timeout 0 0
+ logging synchronous level 0 limit 20
+ login authentication NO
+line vty 0 4
+ authorization exec VTYZ
+ login authentication VTY
+ transport input all
+line vty 5 15
+!
+ip domain-name ine.com
+username cisco privilege 15 password 0 cisco
+crypto key gen rsa mod 1024
+!
+!
+end
