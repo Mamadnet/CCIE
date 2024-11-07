@@ -1,11 +1,45 @@
 
 conf t 
 no ip domain lookup
+!------- aaa
+aaa new-model
+radius server ISE
+ address ipv4 100.0.1.22 auth-port 1812 acct-port 1813
+ key iselogin
+!
+aaa group server radius ise-group
+ server name ISE
+!
+aaa authentication login default group ise-group local
+aaa authentication login console local
+aaa authentication enable default group ise-group
+aaa authentication dot1x default group ise-group
+aaa authorization exec default group ise-group local
+aaa authorization network default group ise-group
+aaa authorization auth-proxy default group ise-group
+aaa authorization console
+aaa accounting auth-proxy default start-stop group ise-group
+aaa accounting dot1x default start-stop group ise-group
+username admin priv 15 password 0 admin
+enable password Test123
+!
+!------ Interface
+alias exec sri show run int 
+alias exec sis show int status
 alias exec siib show ip int  br
 alias exec sir show ip route
+alias exec sid show interface description
+!
+!------ BGP
 alias exec sibs show ip bgp summary
 alias exec rbgp show run | sec router bgp
+!
+!------ Spanning
+alias exec sst show spanning-tree
+alias exec ssb show spanning-tree brief
+!
 line con 0
+login authentication console
 logging sync
 end
 !
