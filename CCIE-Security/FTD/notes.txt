@@ -1,0 +1,22 @@
+
+
+fmc =======================================================
+
+admin@fmc1:~$
+
+sudo su
+configure-network
+
+or
+
+sudo configure-network
+
+ftd =======================================================
+
+default shell
+    clish
+
+lina:
+    >system support diagnostic-cli 
+    firepower>en
+    firepower#
