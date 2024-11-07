@@ -81,6 +81,26 @@ translate_hits = 0, untranslate_hits = 0
 =======================================
 
 
+#BGP through ASA
+#Example 1
+
+class-map BGP
+match port tcp eq bgp
+
+tcp-map TMAP
+tcp-options range 19 19 allow
+
+policy-map P-Outside
+class BGP
+set connection random-sequence-number disable
+set connection advanced-options TMAP
+
+service-policy P-Outside interface OUTSIDE
+
+
+=======================================
+
+
 
 show run interface
 show route
