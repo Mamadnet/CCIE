@@ -114,6 +114,21 @@ changeto system
 mac-address auto    ! to have different mac for shared interface 
 
 ========================================
+
+policy-map type inspect http Policy-Deep-Inspection
+parameters
+spoof-server "Apache Server"
+
+policy-map CustomPolicy
+class HTTP
+inspect http Policy-Deep-Inspection
+
+
+service-policy CustomPolicy interface OUTSIDE
+
+
+========================================
+
 show run interface
 show route
 show route INSIDE
