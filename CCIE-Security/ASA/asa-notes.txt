@@ -99,9 +99,21 @@ service-policy P-Outside interface OUTSIDE
 
 
 =======================================
+show version ! to see number of lic to have context
+clear configuration context
+show run context
+
+    admin-context admin
+    context admin
+    allocate-interface M0/0
+    config-url flash:admin.cfg
+    changeto system
 
 
+changeto system
+mac-address auto    ! to have different mac for shared interface 
 
+========================================
 show run interface
 show route
 show route INSIDE
