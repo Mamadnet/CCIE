@@ -75,3 +75,39 @@ ICMPv6 ND packets
 Cisco claims that, when inbound IPv6 ACL is applied
     • ICMPv6 (NS,NA,RS,RA) messages are implicitly allowed,
     but don’t rely on it
+
+
+
+
+
+
+#Reflexive Access Lists
+
+
+ou can approximate session filtering by using the established keyword with the permit command. The established keyword filters TCP packets based on whether the ACK or RST bits are set. (Set ACK or RST bits indicate that the packet is not the first in the session, 
+and therefore, that the packet belongs to an established session.) 
+
+
+    interface Ethernet 0
+    description Access from the I-net to our Internal Network via this interface
+    ip access-group inboundfilters in
+    ip access-group outboundfilters out
+    !
+    ip reflexive-list timeout 120
+    !
+    ip access-list extended outboundfilters
+    permit eigrp any any
+    deny icmp any any
+    evaluate tcptraffic
+    !
+    ip access-list extended inboundfilters
+    permit tcp any any reflect tcptraffic
+
+
+#rtbh ================================================
+
+rfc5635
+
+rfc6666
+IPv6
+   address prefix 0100::/64 as a Discard-Only Prefix
