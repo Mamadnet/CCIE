@@ -1,0 +1,54 @@
+port scanning os fingerprint 
+
+    Echo Request – ICMP Type 8 Code 0
+    Echo Replies – ICMP Type 0 Code 0
+    Time Exceeded – ICMP Type 11 Code 0
+    Fragment needed but DF bit set – ICMP Type 3 Code 4
+
+network topology
+ traceroute
+
+ smurf attacks
+    reflection attack
+
+==============
+icmp redirect
+icmp router discovery
+
+====================
+
+icmp tunneling
+
+========================
+
+
+no ip directed-broadcast
+
+class-map drop-icmp
+match protocol icmp
+
+policy-map ddos-icmp
+    calss drop-icmp
+    drop
+
+interface xxx
+ip nabr protocol-discovery 
+
+
+=====================
+
+Router#sh run | i access-list 150
+access-list 150 remark ICMP ACL
+access-list 150 remark Block fragmented ICMP packets
+access-list 150 deny icmp any any fragments
+
+access-list 150 remark Permit troubleshooting ICMP types
+access-list 150 permit icmp any any echo
+access-list 150 permit icmp any any echo-reply
+access-list 150 permit icmp any any time-exceeded
+access-list 150 permit icmp any any packet-too-big
+access-list 150 remark Deny any other ICMP messages
+access-list 150 deny icmp any any
+access-list 150 remark Allow Other Traffic
+access-list 150 permit ip any any
+Router#
