@@ -1,0 +1,41 @@
+
+
+
+Configuring Unicast RPF
+Before you begin
+To use Unicast Reverse Path Forwarding, you must configure a device for Cisco Express Forwarding switching or distributed Cisco Express Forwarding switching. If Cisco Express Forwarding is not enabled globally on a device, Unicast RPF will not work on that device
+
+
+
+Strict mode    #ip verify unicast source reachable-via rx 
+Loose mode     #ip verify unicast source reachable-via any
+Loose Mode Configuration with Default Route  #ip verify unicast source reachable-via any allow-default
+
+
+rtbh
+Step 1- Configure the Static Route to Null0 on All the Routers
+
+    #ip route 192.0.2.0 255.255.255.0 Null0
+
+
+Step 2 – Prepare the Trigger Router
+
+    #router bgp 109
+    #
+    #redistribute static route-map static-to-bgp
+    #!
+    #route-map static-to-bgp permit 10
+    #match tag 66
+    #set ip next-hop 192.0.2.1
+    #set local-preference 50
+    #set community no-export 600:000
+    #set origin igp
+    #!
+    #Route-map static-to-bgp permit 20
+
+Step 3 – Activation
+
+
+    #ip route 171.68.1.1 255.255.255.255 Null0 Tag 66
+
+
