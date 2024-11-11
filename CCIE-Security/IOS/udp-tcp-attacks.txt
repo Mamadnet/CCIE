@@ -1,0 +1,35 @@
+
+
+tcp session hijack
+    non-blind
+    blind spoofing
+    rfc 5691
+    mitigation
+        sequence number randomization 
+
+
+tcp syn flood
+
+tcp intercept
+
+
+https://www.ciscopress.com/articles/article.asp?p=345618&seqNum=3
+
+Router(config)# ip tcp intercept list extended_ACL_#
+Router(config)# access-list 100 tcp permit tcp any any
+Router(config)# ip tcp intercept list 100
+Router(config)# ip tcp intercept mode {intercept | watch}
+Router(config)# ip tcp intercept watch-timeout seconds
+Router(config)# ip tcp intercept finrst-timeout seconds
+Router(config)# ip tcp intercept connection-timeout seconds
+Router(config)# ip tcp intercept max-incomplete high number
+Router(config)# ip tcp intercept max-incomplete low number
+
+Router(config)# ip tcp intercept drop-mode {oldest | random}
+
+
+Router(config)# ip tcp intercept one-minute high number
+Router(config)# ip tcp intercept one-minute low number
+
+Router# show tcp intercept statistics
+Router# show tcp intercept connections 
