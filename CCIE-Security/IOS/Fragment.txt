@@ -1,0 +1,14 @@
+MTU vs datagram
+
+
+miniumum mtu
+    ipv4 68 bytes
+    ipv4v6 1280 bytes
+
+minimum datagram size
+
+    IPv4 575 bytes
+    IPv6 1280 bytes
+
+Default MTU over ethernet
+    1500 bytes
