@@ -12,3 +12,21 @@ minimum datagram size
 
 Default MTU over ethernet
     1500 bytes
+
+
+
+deny ip any any fragment                #to deny non-initial fragments because they have no L4 information 
+permit tcp any hoat 10.10.10.10 eq www  #non-initial fragments permitted without checking the port even
+
+
+from dell pc
+
+    to check fragmentation
+        show ip traffic
+    to copy file from router using http :
+
+        ip http server
+        ip http path bootflash:
+        ip http authentication
+
+    copy http://...../
