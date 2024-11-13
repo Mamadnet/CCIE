@@ -33,3 +33,29 @@ Router(config)# ip tcp intercept one-minute low number
 
 Router# show tcp intercept statistics
 Router# show tcp intercept connections 
+
+
+Sets the TCP Intercept mode to watch mode.
+ #ip tcp intercept mode watch
+TCP Intercept is configured to monitored TCP connection to servers matched in the TCPInterceptACL access-list, this provides us granular control of the servers and ports we want to monitor. 
+#ip tcp intercept list TCPInterceptACL
+The router will transmit a RST packet to servers if the connection is not established within 8 seconds. 
+#ip tcp intercept watch-timeout 8
+TCP Intercept will enter an aggressive mode and start dropping the oldest TCP connection if there are 500 half-open TCP connections until that number is below 400 half-open TCP connection. 
+#ip tcp intercept max-incomplete high 500 & 
+#ip tcp intercept max-incomplete low 400
+TCP Intercept will enter an aggressive mode and start dropping the oldest TCP connection if 300 connection requests within one minute until that number is below 200 requests a minute. 
+#ip tcp intercept one-minute high 300 & 
+#ip tcp intercept one-minute low 200
+TCP Intercept will close and any connection that has been open for 8 hours (28800 seconds) with no activity. 
+#ip tcp intercept connection-timeout 28800
+
+Sample TCP Intercept watch mode configuration
+
+The above TCP Intercept intercept mode configuration is very similar to the previous watch mode but the first thing you will notice is the fact it doesn’t tell you it is operating in intercept mode, this is because it operates in intercept mode by default. You also notice 2 additional commands in here:
+
+
+#ip tcp intercept finrst-timeout 20 
+this tells to router when it sees a TCP connection being torn down, if that connection is not closed within 20 seconds the router will close the connection itself by sending a RST packet.
+#ip tcp intercept drop-mode random 
+when TCP Intercept starts aggressively dropping connections by default it drops the oldest connections, this behavior can be changed so the router drops random TCP connections instead of the oldest connections.

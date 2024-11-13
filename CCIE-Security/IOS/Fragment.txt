@@ -12,3 +12,21 @@ minimum datagram size
 
 Default MTU over ethernet
     1500 bytes
+
+can see mtu in RA packets :
+    #show ipv6 routers
+    conf#ipv6 nd ra mtu supress
+
+
+IPv6 there is no fragmentation on routers
+
+
+
+ip fragment overlapped
+ip fragmentation buffer full
+ip fragmentation overrun
+ip fragment too small
+
+teardrop
+rose attack
+nuke
