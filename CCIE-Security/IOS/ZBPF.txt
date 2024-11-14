@@ -1,3 +1,37 @@
 show ip port-map  #pam
 
 #lepc
+
+
+zone security LAN
+zone security WAN
+
+
+class-map type inspect match-any TCP-ICMP
+match protocol tcp
+match protocol ICMP
+
+
+policy-map type inspect Pmap-lan-WAN
+class TCP-ICMP
+inspect
+
+zone-pair security Pmap-lan-WAN source LAN destination WAN
+service-policy type inspect Pmap-lan-WAN
+
+interface g0
+zone-member security LAN
+
+
+interface g1
+zone-member security WAN
+
+show zone security 
+show policy-firewall ...
+show policy-map type inspect
+show class-map type inspect
+
+
+
+debug policy-firewall protocol tcp
+debug policy-firewall object-creation
