@@ -32,6 +32,6 @@ show policy-map type inspect
 show class-map type inspect
 
 
-
+clear policy-firewall session
 debug policy-firewall protocol tcp
 debug policy-firewall object-creation
