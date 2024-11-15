@@ -35,3 +35,52 @@ show class-map type inspect
 clear policy-firewall session
 debug policy-firewall protocol tcp
 debug policy-firewall object-creation
+
+
+#show parameter-map type ooo global
+parameter-map type ooo global
+    tcp reassembly timeout 5
+    tcp reassembly queue length 16
+    tcp reassembly memory limit 1024
+    tcp reassembly alarm off
+
+
+#show policy-firewall config
+#show policy-firewall config
+
+
+For IPv6, the following ICMP types are supported
+    . Echo Request/Echo Reply
+    · Time Exceeded
+    · Destination Unreachable
+    · Packet Too Big (RFC 4443)
+    · Parameter Problem (RFC 4443)
+
+A TCP session can be in the following states
+    · Embryonic, or half-open (TCP three-way handshake not established)
+    · Established and active (traffic being sent through the session)
+    · Established and idle (traffic not being sent through the session)
+    · Half-closed (FIN has been sent, but no FIN-ACK
+
+    #parameter-map type inspect default
+    #tcp window-scale-enforcemenr loose
+
+
+CSR6# conf t
+Enter configuration commands, one per line. End with CNTL/Z.
+CSR6(config) #par
+CSR6 (config) #para
+CSR6 (config) #parameter-map ty
+CSR6(config) #parameter-map type in
+CSR6 (config) #parameter-map type inspect global
+CSR6(config-profile) #exit
+CSR6 (config) #parameter-map type inspect-glo
+CSR6 (config) #parameter-map type inspect-global
+% parameter-map inspect-global can not be configured if parameter-map global is already configured
+CSR6 (config) #no parameter-map type inspect global
+CSR6 (config) #
+
+
+
+
+
