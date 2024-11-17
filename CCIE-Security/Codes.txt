@@ -24,11 +24,16 @@ privilege exec level 5 configure terminal
 privilege exec level 5 configure
 
 
-
+conf t
 line con 0
 exec-timeout 0 0
 logging synchronous level 0 limit 20
 login authentication NO
+!
+end
+wr
+!
+
 
 line vty 0 5
 authorization commands 5 CMD
