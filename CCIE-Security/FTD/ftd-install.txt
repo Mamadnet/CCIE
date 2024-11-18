@@ -1,0 +1,45 @@
+rommon 1 > erase disk0:
+rommon 2 >
+rommon 2 > ADDRESS=10.11.10.190
+rommon 3 > NETMASK=255.255.255.0
+rommon 4 > GATEWAY=10.11.10.1
+rommon 5 > SERVER=10.11.11.250
+rommon 6 > IMAGE=ftd-boot-9.9.2.0.lfbff
+rommon 7 > set
+ADDRESS=10.11.10.190
+NETMASK=255.255.255.0
+GATEWAY=10.11.10.1
+SERVER=10.11.11.250
+IMAGE=ftd-boot-9.9.2.0.lfbff
+CONFIG=
+PS1="rommon ! > "
+
+rommon 8 > tftpdnld
+
+
+firepower-boot>system install ftp://anonymous:anonymous@10.11.11.250/ftd-6.2.3-83.pkg
+
+===================================================================================================
+FXOS is running on 4100 and ftd will be a virual it
+
+FXOS3-A# connect
+Mezzanine Adapter
+Cisco Integrated Management Controller
+Connect to FXOS CLI
+Connect to Local Management CLI
+Security Module Console
+
+I
+
+adapter
+cimc
+fxos
+local-mgmt
+module
+
+FXOS3-A# connect local-mgmt
+FXOS3-A(local-mgmt) # erase configuration
+
+FXOS3-A(local-mgmt) #
+FXOS3-A(local-mgmt) # exit
+FXOS3
