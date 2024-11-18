@@ -1,4 +1,12 @@
 
+L3/4 ACl after prefilter policy is cache of L7 ACP 
+
+amp
+1 hour malware
+4 hour clean
+file -> Talos analysis cloud
+file disposition queried against amp cloud shar256 
+
 
 fmc =======================================================
 
