@@ -43,3 +43,7 @@ FXOS3-A(local-mgmt) # erase configuration
 FXOS3-A(local-mgmt) #
 FXOS3-A(local-mgmt) # exit
 FXOS3
+
+
+Step 4: Call the script to re-configure the FMC network settings
+/usr/local/sf/bin/configure-network
