@@ -47,3 +47,13 @@ FXOS3
 
 Step 4: Call the script to re-configure the FMC network settings
 /usr/local/sf/bin/configure-network
+
+
+
+fmc,ftd
+ tail -f /var/log/messages
+fmc
+sudo su
+mysql -padmin sfsnort -e "select name,ip,uuid,role from EM_peers where role !=0"
+remove_peer.pl 192.168.1.51
+
