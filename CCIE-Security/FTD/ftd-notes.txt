@@ -53,3 +53,9 @@ Please make note of reg key as this will be required while adding Device in FMC.
 
 >expertnetstat -antp | grep 8305
 >sftunnels_status
+
+
+
+
+
+show runn
