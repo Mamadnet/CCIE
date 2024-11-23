@@ -1,0 +1,79 @@
+
+
+
+show dmvpn
+nhrp state mean there issue with route (default) ,accesslist 
+
+
+hub
+mgre=============================================
+
+int tunnel 1
+ip add 192.168.1.1 255.255.255.0
+tunnel source gi0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+ip nhrp map 192.168.1.2 2.2.2.2
+ip nhrp map 192.168.1.3 3.3.3.2
+ip nhrp map 192.168.1.4 4.4.4.2
+ip nhrp map 192.168.1.9 9.9.9.2
+ip nhrp map multicast 9.9.9.2
+ip nhrp map multicast 2.2.2.2
+ip nhrp map multicast 3.3.3.2
+ip nhrp map multicast 4.4.4.2
+
+conf t
+router eigrp 1
+network 192.168.1.0 0.0.0.255
+network 172.16.0.0 0.0.255.255
+end
+!
+
+
+
+no int tunnel 3
+int tunnel 4
+ip add 192.168.1.4 255.255.255.0
+tunnel source e0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+ip nhrp map 192.168.1.9 9.9.9.2
+ip nhrp map 192.168.1.2 2.2.2.2
+ip nhrp map 192.168.1.3 3.3.3.2
+ip nhrp map 192.168.1.1 1.1.1.2
+ip nhrp map multicast 1.1.1.2
+ip nhrp map multicast 9.9.9.2
+ip nhrp map multicast 2.2.2.2
+ip nhrp map multicast 3.3.3.2
+
+dmvpn ================================================================
+
+hub 
+int tunnel 2
+ip add 192.168.1.1 255.255.255.0
+tunnel source e0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+
+
+conf t
+int tunnel 2
+ip add 192.168.1.9 255.255.255.0
+tunnel source e0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+ip nhrp nhs 192.168.1.1
+ip nhrp map 192.168.1.1  1.1.1.2 
+ip nhrp map multicast 1.1.1.2
+exit
+!
+
+
+eigrp
+hub 
+int tu1
+no ip split-horizon eigrp 1
+
+
+ospf :
+ip ospf network point-to-multi

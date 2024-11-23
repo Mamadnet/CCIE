@@ -23,7 +23,9 @@ show crypto ipsec sa peer 9.9.9.2 detail
 show crypto isakmp sa peer 9.9.9.2 detail ------------------
 show crypto isakmp peers 9.9.9.2  ------------------
 
------------------------------------------------------------------------
+
+
+
 -----------------------------------------------------------------------
 site-2-site 
 ------------------------------------------------------------------------
@@ -38,9 +40,32 @@ crypto map CMAP
 
 
 -----------------------------------------------------------------------
------------------------------------------------------------------------
 native IPSEC Tunnel interface / S-vti 
 -----------------------------------------------------------------------
 remove gre form packet  
 int tunnel
 tunnel mode ipsec
+
+
+
+
+===========================================
+
+crypto isakmp policy 10
+auth pre-share
+group 2
+encryption 3des
+hash md5
+
+
+crypto isakmp key mohsin123 address 0.0.0.0
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+crypto ipsec profile DMVPNPROF
+set transform-set TS
+
+int tun 1
+tunnel protection ipsec profile DMVPNPROF
+
+==============================================

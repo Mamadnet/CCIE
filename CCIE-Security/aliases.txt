@@ -55,6 +55,8 @@ alias exec sis show int status
 alias exec sib show ip int  br
 alias exec sir show ip route
 alias exec sid show interface description
+alias exec sia show ip arp
+
 !
 !------ BGP
 alias exec sibs show ip bgp summary
