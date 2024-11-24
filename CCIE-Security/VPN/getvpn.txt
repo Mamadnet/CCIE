@@ -1,0 +1,64 @@
+
+show crypto gdoi detail
+
+clear crypto gdoi
+====================================ketserver====================================
+crypto isakmp policy 10
+    `auth pre-share
+    enc 3des
+    group 2
+    hash md5
+
+crypto isakmp key mohsin123 address 0.0.0.0
+
+crypto ipsec transform-set TS esp-3des esp-md5-hmac
+
+access-list 102 permit ip 172.16.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+
+Crypto ipsec profile GVPNPROF
+    set transform-set TS
+
+crypto gdoi group GVPN
+    identity number 112
+    server local
+    sa ipsec 5
+        match address ipv4 102
+        profile GVPNPROF
+        exit
+    address ipv4 6.6.6.2
+
+
+
+-------------rekey congig ---------
+
+
+crypto key gen rsa mo 2048 label REKEY
+
+crypto gdoi group GVPN
+    server local
+    rekey transport unicast
+    rekey auth mypubkey rsa REKEY
+    rekey algorithm 3des-cbc
+
+int
+
+==========================on all members/sites=======================================
+
+crypto isakmp policy 10
+    auth pre-share
+    enc 3des
+    group 2
+    hash md5
+
+crypto isakmp key mohsin123 address 6.6.6.2
+
+crypto gdoi group SITES
+    identity number 112
+    server address ipv4 6.6.6.2
+
+crypto map CMAP 10 gdoi
+    set group SITES
+
+int e0/0
+    crypto map CMAP
+

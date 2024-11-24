@@ -1,0 +1,32 @@
+router ospf 1 vrf ACC
+network 2.2.2.0 0.0.0.255 area 0
+network 172.16.20.0 0.0.0.255 area 0
+
+MEL
+crypto isakmp policy 10
+auth pre-share
+encryption 3des
+hash md5
+group 2
+
+crypto keyring Keyring-HR vrf HR
+pre-shared-key address 1.1.1.2 key mohsin123
+
+crypto isakmp profile PROF-HR
+vrf HR
+keyring Keyring-HR
+match identity address 1.1.1.2 255.255.255.255 HR
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+acces-list 102 permit ip 192.168.1.0 0.0.0.255 192.168.2.0 0.0.0.255
+
+crypto map C-HR isakmp-profile PROF-HR
+
+crypto map C-HR 10 ipsec-isakmp
+match address 102 
+set peer 1.1.1.2
+set transform-set TS
+
+int e0/0.1
+crypto map C-HR

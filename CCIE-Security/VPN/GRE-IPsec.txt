@@ -1,5 +1,13 @@
 
 
+
+
+show crypto session remote 9.9.9.2 detail 
+show crypto ipsec sa peer 9.9.9.2 detail
+show crypto isakmp sa peer 9.9.9.2 detail ------------------
+show crypto isakmp peers 9.9.9.2  ------------------
+
+
 GRE-IPSEC 
 -----------------------------------------------------------------------
 crypto isakmp policy 22
@@ -16,20 +24,11 @@ crypto ipsec transform-set ts-r12 ah-md5-hmac esp-3des esp-md5-hmac
 crypto ipsec profile pf-ipsec
  set transform-set ts-r12
 
-
-
-show crypto session remote 9.9.9.2 detail 
-show crypto ipsec sa peer 9.9.9.2 detail
-show crypto isakmp sa peer 9.9.9.2 detail ------------------
-show crypto isakmp peers 9.9.9.2  ------------------
-
-
-
-
 -----------------------------------------------------------------------
 site-2-site 
 ------------------------------------------------------------------------
 access-list 100 permit ip 192.168.11.0 0.0.0.255 192.168.22.0 255.255.255.0
+
 crypto man CMAP 22 ipsec-isakmp
 match address 100
 set peer 9.9.9.9.2
