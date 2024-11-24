@@ -1,0 +1,51 @@
+
+
+https://www.cisco.com/c/en/us/support/docs/security-vpn/ipsec-negotiation-ike-protocols/50282-ios-ca-ios.html
+
+https://www.cisco.com/c/en/us/solutions/enterprise/design-zone-security/index.html
+
+show crypto pki server xxxx request
+
+============= server confis ===============================
+ip http server
+crypto key generate rsa general-keys modulus modulus-size label MyCA
+crypto pki server MyCA
+    issuer-name  CN=cisco L=Portugal, C=PT
+    no shutdown
+
+
+    after request from client
+    crypto pki sever xxxx grant all
+
+====================  clients config ======================
+    ip domain-name local.label
+    crypto key generate rsa general-keys modulus modulus-size
+    crypto pki trustpoints Sites
+        enrollment url http://server-ip
+        revocation-check none
+
+    crypto pki authenticate Sites
+    crypto pki enroll Sites
+
+
+
+
+crypto isakmp policy 10
+auth rsa-sig
+hash md5group 2
+enc 3des
+
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+
+access-list 100 permit ip  any any 
+
+crypto map CMAP 10 ipsec-isakmp
+set peer 3.3.3.2
+set transform-set TS
+match address 100
+
+
+int e0/0
+crypto map CMAP
