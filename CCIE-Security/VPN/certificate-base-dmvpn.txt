@@ -1,0 +1,64 @@
+
+
+
+
+HUB
+========================================
+
+Crypto isakmp policy 10
+authentication rsa-sig
+hash md5
+group 2
+encryption 3des
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+crypto ipsec profile DMVPNPROF
+set transform-set TS
+
+int tun 100
+ip add 192.168.1.1 255.255.255.0
+tunnel source e0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+ip nhrp map multicast dynamic
+no ip split-horizon eigrp 1
+ip nhrp redirect
+tunnel protection ipsec profile DMVPNPROF
+
+router eigrp 1
+network 192.168.1.0
+network 172.16.9.0 255.255.255.0
+network 172.16.10.0 255.255.255.0
+
+SPOKES
+========================================
+
+Crypto isakmp policy 10
+authentication rsa-sig
+hash md5
+group 2
+encryption 3des
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+crypto ipsec profile DMVPNPROF
+set transform-set TS
+
+int tun 100
+ip add 192.168.1.2 255.255.255.0
+tunnel source e0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+ip nhs 192.168.1.1
+ip nhrp map 192.168.1.1 5.5.5.2
+ip nhrp map multicast 5.5.5.2
+ip nhrp shortcut
+tunnel protection ipsec profile DMVPNPROF
+
+router eigrp 1
+network 192.168.1.0
+network 172.16.3.0 255.255.255.0
+network 172.16.4.0 255.255.255.0
+
+<
