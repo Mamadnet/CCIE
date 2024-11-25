@@ -73,6 +73,7 @@ eigrp
 hub 
 int tu1
 no ip split-horizon eigrp 1
+no ip next-hop-self eigrp 1
 
 
 ospf :

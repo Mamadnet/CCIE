@@ -1,10 +1,10 @@
-
 show crypto gdoi detail
-
 clear crypto gdoi
-====================================ketserver====================================
+
+
+====================================keyserver====================================
 crypto isakmp policy 10
-    `auth pre-share
+    auth pre-share
     enc 3des
     group 2
     hash md5
@@ -19,7 +19,7 @@ Crypto ipsec profile GVPNPROF
     set transform-set TS
 
 crypto gdoi group GVPN
-    identity number 112
+    identity number 100
     server local
     sa ipsec 5
         match address ipv4 102
@@ -40,7 +40,7 @@ crypto gdoi group GVPN
     rekey auth mypubkey rsa REKEY
     rekey algorithm 3des-cbc
 
-int
+
 
 ==========================on all members/sites=======================================
 
@@ -50,11 +50,11 @@ crypto isakmp policy 10
     group 2
     hash md5
 
-crypto isakmp key mohsin123 address 6.6.6.2
+crypto isakmp key cisco address 1.1.1.2
 
 crypto gdoi group SITES
-    identity number 112
-    server address ipv4 6.6.6.2
+    identity number 100
+    server address ipv4 1.1.1.2
 
 crypto map CMAP 10 gdoi
     set group SITES

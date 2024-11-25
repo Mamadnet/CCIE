@@ -50,6 +50,10 @@ username admin priv 15 password 0 admin
 enable password Test123
 !
 !------ Interface
+en
+conf t 
+no ip domain lookup
+!
 alias exec sri show run int 
 alias exec sis show int status
 alias exec sib show ip int  br

@@ -1,0 +1,42 @@
+
+Hub1
+    interface Tunnel 0
+    ip address 192.168.1.1 255.255.255.0            
+    ip nhrp map multicast dynamic 
+    ip nhrp network-id 1
+    tunnel source e0/0
+    tunnel mode gre multipoint
+
+    
+Hub2
+    interface Tunnel 0
+    ip address 192.168.1.2 255.255.255.0            
+    ip nhrp map multicast dynamic 
+    ip nhrp network-id 1
+    tunnel source e0/0
+    tunnel mode gre multipoint
+
+    interface Tunnel 0
+    ip nhrp map 192.168.1.1 nmba 1.1.2 multicast
+
+Sopke
+
+    interface Tunnel 0
+    ip address 192.168.1.9 255.255.255.0
+    ip nhrp network-id 1
+    ip nhrp nhs 192.168.1.1 nbma 1.1.1.2 multicast
+    ip nhrp nhs 192.168.1.2 nbma 2.2.2.2 multi
+    tunnel source e 0/0
+    tunnel mode gre multipoint
+
+
+
+
+
+for ospf :
+
+ip ospf network point-to-multipoint
+
+router ospf 1
+ network 172.16.0.0 0.0.255.255 area 0
+ network 192.168.1.0 0.0.0.255 area 0
