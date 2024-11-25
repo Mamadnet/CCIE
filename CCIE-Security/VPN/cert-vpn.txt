@@ -18,14 +18,14 @@ crypto pki server MyCA
     crypto pki sever xxxx grant all
 
 ====================  clients config ======================
-    ip domain-name local.label
-    crypto key generate rsa general-keys modulus modulus-size
-    crypto pki trustpoints Sites
-        enrollment url http://server-ip
+    ip domain-name r9.local.label
+    crypto key generate rsa general-keys modulus 2048
+    crypto pki trustpoint spokes
+        enrollment url http://1.1.1.2
         revocation-check none
 
-    crypto pki authenticate Sites
-    crypto pki enroll Sites
+    crypto pki authenticate spokes
+    crypto pki enroll spokes
 
 
 ++++++++++++++++++++++++++++++++++++++++++++++

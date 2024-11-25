@@ -68,6 +68,17 @@ ip nhrp map multicast 1.1.1.2
 exit
 !
 
+or
+
+conf t
+int tunnel 0
+ip add 192.168.1.9 255.255.255.0
+tunnel source e0/0
+tunnel mode gre multipoint
+ip nhrp network-id 1
+ip nhrp nhs 192.168.1.1 nbma  1.1.1.2  multicast 
+exit
+!
 
 eigrp
 hub 

@@ -24,7 +24,7 @@ ip nhrp network-id 1
 ip nhrp map multicast dynamic
 no ip split-horizon eigrp 1
 ip nhrp redirect
-tunnel protection ipsec profile DMVPNPROF
+tunnel protection ipsec profile pf1 DMVPNPROF
 
 router eigrp 1
 network 192.168.1.0
@@ -42,7 +42,7 @@ encryption 3des
 
 crypto ipsec transform-set TS esp-3des esp-sha-hmac
 
-crypto ipsec profile DMVPNPROF
+crypto ipsec profile pf1
 set transform-set TS
 
 int tun 100
