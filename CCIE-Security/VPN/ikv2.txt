@@ -1,0 +1,33 @@
+show crypto ikv2 sa
+
+
+crypto ikev2 proposal PROPOSAL
+encryption aes-cbc-128 3des
+integrity sha1 md5
+group 2 5
+
+crypto ikev2 policy POLICY
+proposal PROPOSAL
+
+crypto ikev2 keyring UK
+peer NZ
+address 2.1.1.2
+pre-share local mohsin123
+pre-share remote abc123
+
+crypto ikev2 profile IKEV2-PROF
+match identity remote address 2.1.1.2 255.255.255.255
+authentication local pre-share
+authentication remote pre-share
+keyring local UK
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+access-list 102 permit ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255
+
+crypto map CMAP 10 ipsec-isakmp
+set peer 2.1.1.2
+set transform-set TS
+match address 102
+
+
