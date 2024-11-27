@@ -1,0 +1,24 @@
+interface loopback 100
+ip add 192.168.1.4 255.255.255.0
+
+interface virtual-template 1 type tunnel
+ip unnumbered loopback 100
+tunnel source e0/0
+ip nhrp network-id 1
+ip nhrp redirect
+tunnel protection ipsec profile DVTIPROF
+
+
+
+ip local pool DVPNtunnel 192.168.1.20 192.168.1.30
+
+crypto ikev2 authorization policy default
+ pool  DVPNtunnel
+ route set interface
+
+aaa new model
+aaa authorization network default local
+
+
+crypto ikev2 profile IKEV2-Huby
+aaa authorization group override psk list default default
