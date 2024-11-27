@@ -1,0 +1,32 @@
+crypto ikev2 proposal PROPOSAL
+enc aes-cbc-128 3des
+integrity sha1 md5
+group 2 5
+
+crypto ikev2 policy POLICY
+proposal PROPOSAL
+
+crypto ikev2 keyring UK
+peer NZ
+address 2.1.1.2
+pre-share mohsin123
+
+crypto ikev2 profile IKEV2
+match identity remote address 2.1.1.2 255.255.255.255
+authenticaion local pre-share
+authentication remote pre-share
+keyring local UK
+
+crypto ipsec transform-set TS esp-3des esp-sha-hmac
+
+crypto ipsec profile SVTIPROF
+set transform TS
+set ikev2-profile IKEV2
+
+
+int tun100
+ip add 192.168.1.1 255.255.255.0
+tunnel source 1.1.1.2
+tunnel destination 2.1.1.2
+tunnel mode ipsec ipv4
+tunnel protection ipsec profile SVTIPROF
