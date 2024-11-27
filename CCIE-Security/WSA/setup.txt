@@ -1,0 +1,5 @@
+>resetconfig
+Enter
+>commit
+>setgateway
+>commit
