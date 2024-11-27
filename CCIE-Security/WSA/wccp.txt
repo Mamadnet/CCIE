@@ -1,0 +1,10 @@
+
+>Commands to enable WCCP protocol on the Cisco router.
+
+#ip wccp web-cache redirect-list 120 password anything
+#access-list 120 permit ip host 192.168.112.14 any
+
+The "redirect-list" option specifies an access-list to filter which traffic is to be redirected to WCCP web-cache device.
+
+The "password" command is optional
+If added, make sure that it matches the WCCP password configured on the WSA.

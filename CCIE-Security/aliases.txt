@@ -52,11 +52,17 @@ no ip domain lookup
     login authentication console
     logging sync
     exec-timeout 0
+! 
+!------- NTP 
 
+conf t
+ntp master
 
 !---------------------------- nat
 conf t 
 int e0/3
+no sh
+ip add 192.168.1.22 255.255.255.0
 ip nat outside
 !
 int e0/0
