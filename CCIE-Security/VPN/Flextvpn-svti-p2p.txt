@@ -1,0 +1,74 @@
+
+
+dvti -spoke ======================================
+crypto ikev2 proposal PROPOSAL
+integrity md5 sha1
+encryption 3des aes-cbc-128
+group 2 5
+
+crypto ikev2 policy POLICY
+proposal PROPOSAL
+
+crypto ikev2 keyring Poky
+peer Poky
+address 5.5.5.2
+pre-shared-key mohsin123
+
+crypto ikev2 profile IKEV2-Poky
+match identity remote address 5.5.5.2
+authentication local pre-share
+authentication remote pre-share
+keyring local Poky
+
+crypto ipsec transform-set TS esp-sha-hmac esp-3des
+
+crypto ipsec profile DVTIPROF
+set transform-set TS
+set ikev2-profile IKEV2-Poky
+
+int tun 1
+ip add 192.168.1.3 255.255.255.0
+tunnel source e0/0
+tunnel destination 5.5.5.2
+tunnel mode ipsec ipv4
+tunnel protection ipsec profile DVTIPROF
+
+
+svti ==========================================
+
+crypto ikev2 proposal PROPOSAL
+integrity md5 sha1
+encryption 3des aes-cbc-128
+group 2 5
+
+crypto ikev2 policy POLICY
+proposal PROPOSAL
+
+crypto ikev2 keyring Huby
+peer Hub
+address 0.0.0.0
+pre-shared-key mohsin123
+
+crypto ikev2 profile IKEV2-Huby
+match identity remote address 0.0.0.0
+authentication local pre-share
+authentication remote pre-share
+keyring local Huby
+
+crypto ipsec transform-set TS esp-sha-hmac esp-3des
+
+crypto ipsec profile DVTIPROF
+set transform-set TS
+set ikev2-profile IKEV2-Huby
+
+int lo100
+ip add 192.168.1.1 255.255.255.0
+
+interface virtual-template 1 type tunnel
+ip unnumbered lo 100
+tunnel source e0/0
+tunnel mode ipsec ipv4
+tunnel protection ipsec profile DVTIPROF
+
+crypto ikev2 profile IKEV2-Huby
+virtual-template 1

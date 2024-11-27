@@ -29,7 +29,7 @@ Connect to FXOS CLI
 Connect to Local Management CLI
 Security Module Console
 
-I
+
 
 adapter
 cimc
@@ -56,4 +56,7 @@ fmc
 sudo su
 mysql -padmin sfsnort -e "select name,ip,uuid,role from EM_peers where role !=0"
 remove_peer.pl 192.168.1.51
+
+
+
 
