@@ -1,0 +1,18 @@
+
+deploymet mode
+expilici
+transparent
+
+To congifure proxy at client machine
+pac file
+
+PAC File Deployment Options
+
+» If a browser supports WPAD, it can detect the PAC file location via DHCP or DNS
+. HTTP location of the WPAD.dat file is learned via DHCP option 252
+. Based on its FQDN, the user's computer will try to locate the WPAD.dat file via DNS   
+
+
+» If the computer name is cristian.inelab.local, it will try the following URL's via DNS method
+. http://wpad.inelab.local/wpad.dat
+. http://wpad.local/wpad.dat
