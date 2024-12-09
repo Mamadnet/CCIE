@@ -1,3 +1,20 @@
+
+
+interface Management0/0
+ management-only
+ nameif management
+ security-level 100
+ ip address dhcp
+
+ http server enable
+ http  192.168.1.0 255.255.255.0 management
+
+
+access-list management_access extended permit tcp any any
+access-list management_access extended permit udp any any
+
+
+
 config
 hostname
 enable password
