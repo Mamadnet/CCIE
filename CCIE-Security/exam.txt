@@ -1,29 +1,20 @@
  QUESTION: 3 
-
 Which two prevention techniques are used to mitigate SQL injection attacks? (Choose two)
-
     Check integer, float, or Boolean string parameters to ensure accurate values.
     Use prepared statements and parameterized queries.
 
 QUESTION: 5 
-
 Which two mechanisms are used to control phishing attacks? (Choose two)
-
     Enable browser alerts for fraudulent websites.
     Implement email filtering techniques.
 
-
-
  Question #6 
-
 In which form of attack is alternate encoding, such as hexadecimal representation, most often observed?
     C. cross-site scripting Most Voted 
 https://owasp.org/www-community/Double_Encoding
 
 QUESTION: 7 
-
 Which two preventive measures are used to control cross-site scripting? (Choose two)
-
     Enable client-side scripts on a per-domain basis.
     Incorporate contextual output encoding/escaping.
 
@@ -36,20 +27,17 @@ Question #9
 QUESTION: 10 
 What is a language format designed to exchange threat intelligence that can be transported over the TAXII protocol?
     STIX
+
 QUESTION: 11 
-
 Which two capabilities does TAXII support? (Choose two)
-
     Exchange
     Pull messaging
 
 QUESTION: 13 
-
 Which PKI enrollment method allows the user to separate authentication and enrollment actions and also provides an option to specify HTTP/TFTP commands to perform file retrieval from the server?
     profile
 
 QUESTION: 14 
-
 There are four main types of rootkits: Kernel rootkits, User mode rootkits, Bootloader rootkits, Memory rootkits
     bootloader
     user mode
@@ -60,19 +48,16 @@ Which threat involves software being used to gain unauthorized access to a compu
 
 
 QUESTION: 18 
-
 Which two key and block sizes are valid for AES? (Choose two)
     128-bit block size, 192-bit key length
     128-bit block size, 256-bit key length
 
 QUESTION: 19 
-
 Which two descriptions of AES encryption are true? (Choose two)
     AES is more secure than 3DES.
     AES can use a 256-bit key for encryption.
 
-QUESTION: 21 Exam Topic: 1, Exam Pool A
-
+QUESTION: 21 
 Elliptic curve cryptography is a stronger more efficient cryptography method meant to replace which current encryption technology?
     RSA
 
@@ -81,10 +66,38 @@ What is the result of running the crypto isakmp key ciscXXXXXXXX address 172.16.
     authenticates the IKEv1 peers in the 172.16.0.0/16 range by using the key ciscXXXXXXXX
 
 
-QUESTION: 23 Exam Topic: 1, Exam Pool A
-
+QUESTION: 23 
 Which technology must be used to implement secure VPN connectivity among company branches over a private IP cloud with any-to-any scalable connectivity?
     GET VPN
 
 Cisco`s Group Encrypted Transport VPN (GETVPN) introduces the concept of a trusted group to eliminate point-to-point tunnels and their associated overlay routing. All group members (GMs) share a common security association (SA), also known as a group SA. This enables GMs to decrypt traffic that was encrypted by any other GM.
 GETVPN provides instantaneous large-scale any-to-any IP connectivity using a group IPsec security paradigm.
+
+QUESTION: 24 
+Which two conditions are prerequisites for stateful failover for IPsec? (Choose two)
+    The IPsec configuration that is set up on the active device must be duplicated on the standby device
+
+    The active and standby devices must run the same version of the Cisco IOS software and must be the same type of device
+
+
+QUESTION: 25 
+Which VPN technology can support a multivendor environment and secure traffic between sites?
+    FlexVPN
+
+
+****QUESTION: 26
+
+A network engineer is configuring DMVPN and entered the crypto isakmp key cisc0380739941 address 0.0.0.0 command on host
+    Enter the command with a different password on hostB.
+
+
+****QUESTION: 27
+A network administrator configured a site-to-site VPN tunnel between two Cisco IOS routers, and hosts are unable to communicate between two sites of VPN. The network administrator runs the debug crypto isakmp sa command to track VPN status.
+What is the problem according to this command output?
+    authentication key mismatch
+
+
+QUESTION: 28 Exam Topic: 1, Exam Pool A
+
+What is a difference between FlexVPN and DMVPN?
+    FlexVPN uses IKEv2, DMVPN uses IKEv1 or IKEv2
