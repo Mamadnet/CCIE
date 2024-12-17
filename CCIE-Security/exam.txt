@@ -1,0 +1,90 @@
+ QUESTION: 3 
+
+Which two prevention techniques are used to mitigate SQL injection attacks? (Choose two)
+
+    Check integer, float, or Boolean string parameters to ensure accurate values.
+    Use prepared statements and parameterized queries.
+
+QUESTION: 5 
+
+Which two mechanisms are used to control phishing attacks? (Choose two)
+
+    Enable browser alerts for fraudulent websites.
+    Implement email filtering techniques.
+
+
+
+ Question #6 
+
+In which form of attack is alternate encoding, such as hexadecimal representation, most often observed?
+    C. cross-site scripting Most Voted 
+https://owasp.org/www-community/Double_Encoding
+
+QUESTION: 7 
+
+Which two preventive measures are used to control cross-site scripting? (Choose two)
+
+    Enable client-side scripts on a per-domain basis.
+    Incorporate contextual output encoding/escaping.
+
+Question #9
+ Which two behavioral patterns characterize a ping of death attack? (Choose two.)
+
+    B. The attack is fragmented into groups of 8 octets before transmission. Most Voted
+    D. Malformed packets are used to crash systems. Most Voted 
+
+QUESTION: 10 
+What is a language format designed to exchange threat intelligence that can be transported over the TAXII protocol?
+    STIX
+QUESTION: 11 
+
+Which two capabilities does TAXII support? (Choose two)
+
+    Exchange
+    Pull messaging
+
+QUESTION: 13 
+
+Which PKI enrollment method allows the user to separate authentication and enrollment actions and also provides an option to specify HTTP/TFTP commands to perform file retrieval from the server?
+    profile
+
+QUESTION: 14 
+
+There are four main types of rootkits: Kernel rootkits, User mode rootkits, Bootloader rootkits, Memory rootkits
+    bootloader
+    user mode
+
+QUESTION: 16 
+Which threat involves software being used to gain unauthorized access to a computer system?
+    virus
+
+
+QUESTION: 18 
+
+Which two key and block sizes are valid for AES? (Choose two)
+    128-bit block size, 192-bit key length
+    128-bit block size, 256-bit key length
+
+QUESTION: 19 
+
+Which two descriptions of AES encryption are true? (Choose two)
+    AES is more secure than 3DES.
+    AES can use a 256-bit key for encryption.
+
+QUESTION: 21 Exam Topic: 1, Exam Pool A
+
+Elliptic curve cryptography is a stronger more efficient cryptography method meant to replace which current encryption technology?
+    RSA
+
+QUESTION: 22
+What is the result of running the crypto isakmp key ciscXXXXXXXX address 172.16.0.0 command?
+    authenticates the IKEv1 peers in the 172.16.0.0/16 range by using the key ciscXXXXXXXX
+
+
+QUESTION: 23 Exam Topic: 1, Exam Pool A
+
+Which technology must be used to implement secure VPN connectivity among company branches over a private IP cloud with any-to-any scalable connectivity?
+    GET VPN
+
+Cisco`s Group Encrypted Transport VPN (GETVPN) introduces the concept of a trusted group to eliminate point-to-point tunnels and their associated overlay routing. All group members (GMs) share a common security association (SA), also known as a group SA. This enables GMs to decrypt traffic that was encrypted by any other GM.
+GETVPN provides instantaneous large-scale any-to-any IP connectivity using a group IPsec security paradigm.
